@@ -1,13 +1,23 @@
 package edu.dnk89.userfront.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
 
+@Entity
 public class PrimaryAccount {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     private int number;
     private BigDecimal balance;
+
+    @OneToMany(mappedBy = "primaryAccount", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore // to avoid infinite loop on serialization
     private List<PrimaryTransaction> transactions;
 
     public Long getId() {
