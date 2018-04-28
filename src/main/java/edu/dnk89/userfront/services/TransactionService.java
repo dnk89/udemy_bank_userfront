@@ -1,6 +1,8 @@
 package edu.dnk89.userfront.services;
 
+import edu.dnk89.userfront.domain.PrimaryAccount;
 import edu.dnk89.userfront.domain.PrimaryTransaction;
+import edu.dnk89.userfront.domain.SavingsAccount;
 import edu.dnk89.userfront.domain.SavingsTransaction;
 
 import java.util.List;
@@ -18,4 +20,6 @@ public interface TransactionService {
     void savePrimaryWithdrawTransaction(PrimaryTransaction primaryTransaction);
 
     void saveSavingsWithdrawTransaction(SavingsTransaction savingsTransaction);
+
+    void transferBetweenAccounts(String transferFrom, String transferTo, String amount, PrimaryAccount primaryAccount, SavingsAccount savingsAccount) throws Exception;
 }
