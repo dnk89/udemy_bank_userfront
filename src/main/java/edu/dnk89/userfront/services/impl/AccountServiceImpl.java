@@ -4,6 +4,7 @@ import edu.dnk89.userfront.dao.PrimaryAccountDao;
 import edu.dnk89.userfront.dao.SavingsAccountDao;
 import edu.dnk89.userfront.domain.*;
 import edu.dnk89.userfront.services.AccountService;
+import edu.dnk89.userfront.services.TransactionService;
 import edu.dnk89.userfront.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private TransactionService transactionService;
 
     private static int nextAccountNumber = 123456;
 
@@ -59,6 +63,8 @@ public class AccountServiceImpl implements AccountService {
             Date date = new Date();
 
             PrimaryTransaction transaction = new PrimaryTransaction(date, "Deposit to Primary Account", "Account", "Finished", amount, account.getBalance(), account);
+            transactionService.savePrimaryDepositTransaction(transaction);
+
         } else if (accountType.equalsIgnoreCase("savings")) {
             SavingsAccount account = user.getSavingsAccount();
             account.setBalance(account.getBalance().add(new BigDecimal(amount)));
@@ -67,6 +73,7 @@ public class AccountServiceImpl implements AccountService {
             Date date = new Date();
 
             SavingsTransaction transaction = new SavingsTransaction(date, "Deposit to Savings Account", "Account", "Finished", amount, account.getBalance(), account);
+            transactionService.saveSavingsDepositTransaction(transaction);
         }
     }
 
@@ -81,6 +88,8 @@ public class AccountServiceImpl implements AccountService {
             Date date = new Date();
 
             PrimaryTransaction transaction = new PrimaryTransaction(date, "Withdraw from Primary Account", "Account", "Finished", amount, account.getBalance(), account);
+            transactionService.savePrimaryWithdrawTransaction(transaction);
+
         } else if (accountType.equalsIgnoreCase("savings")) {
             SavingsAccount account = user.getSavingsAccount();
             account.setBalance(account.getBalance().subtract(new BigDecimal(amount)));
@@ -89,6 +98,7 @@ public class AccountServiceImpl implements AccountService {
             Date date = new Date();
 
             SavingsTransaction transaction = new SavingsTransaction(date, "Withdraw from Savings Account", "Account", "Finished", amount, account.getBalance(), account);
+            transactionService.saveSavingsWithdrawTransaction(transaction);
         }
     }
 

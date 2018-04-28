@@ -1,8 +1,6 @@
 package edu.dnk89.userfront.controller;
 
-import edu.dnk89.userfront.domain.PrimaryAccount;
-import edu.dnk89.userfront.domain.SavingsAccount;
-import edu.dnk89.userfront.domain.User;
+import edu.dnk89.userfront.domain.*;
 import edu.dnk89.userfront.services.AccountService;
 import edu.dnk89.userfront.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequestMapping("/account")
@@ -30,6 +29,7 @@ public class AccountController {
         PrimaryAccount primaryAccount = user.getPrimaryAccount();
 
         model.addAttribute("primaryAccount", primaryAccount);
+        model.addAttribute("primaryTransactionList", primaryAccount.getTransactions());
 
         return "primaryAccount";
     }
@@ -40,6 +40,7 @@ public class AccountController {
         SavingsAccount savingsAccount = user.getSavingsAccount();
 
         model.addAttribute("savingsAccount", savingsAccount);
+        model.addAttribute("savingsTransactionList", savingsAccount.getTransactions());
 
         return "savingsAccount";
     }
