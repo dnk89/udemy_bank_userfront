@@ -3,11 +3,14 @@ package edu.dnk89.userfront.controller;
 import edu.dnk89.userfront.domain.PrimaryAccount;
 import edu.dnk89.userfront.domain.SavingsAccount;
 import edu.dnk89.userfront.domain.User;
+import edu.dnk89.userfront.services.AccountService;
 import edu.dnk89.userfront.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.security.Principal;
 
@@ -17,6 +20,9 @@ public class AccountController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private AccountService accountService;
 
     @RequestMapping("/primaryAccount")
     public String primaryAccount(Principal principal, Model model) {
@@ -37,4 +43,24 @@ public class AccountController {
 
         return "savingsAccount";
     }
+
+    @RequestMapping(value ="/deposit", method = RequestMethod.GET)
+    public String deposit(Model model) {
+        model.addAttribute("accountType", "");
+        model.addAttribute("amount", "");
+
+        return "deposit";
+    }
+
+    @RequestMapping(value = "/deposit", method = RequestMethod.POST)
+    public String depositPost(@ModelAttribute("amount") String amount,
+                              @ModelAttribute("accountType") String accountType,
+                              Principal principal) {
+
+        accountService.deposit(accountType, Double.parseDouble(amount), principal);
+
+        return "redirect:/userFront";
+    }
+
+    
 }
